@@ -34,10 +34,10 @@ def convert_images_to_cmyk(image_paths, output_folder):
             filename = os.path.splitext(os.path.basename(image_path))[0]
 
             # Construct the output path for the CMYK image
-            output_image_path = os.path.join(output_folder, f"{filename}_cmyk.jpg")
+            output_image_path = os.path.join(output_folder, f"{filename}_cmyk.tiff")
 
             # Save the CMYK image
-            cmyk_image.save(output_image_path)
+            cmyk_image.save(output_image_path, "TIFF", dpi=cmyk_image.info.get('dpi'))
             get_image_info(output_image_path)
 
             print(f"Image converted to CMYK and saved as {output_image_path}")
@@ -60,12 +60,19 @@ def get_image_info(image_path):
 
         # Get color mode (RGB, CMYK, grayscale, etc.)
         color_mode = img.mode
-
+        
+        # Get the DPI information
+        dpi = img.info.get('dpi')
+        
         # Print the image information
         print("Image Information:")
         print(f"Format: {image_format}")
         print(f"Size: {width} x {height}")
         print(f"Color Mode: {color_mode}")
+        if dpi:
+            print(f"DPI of the image: {dpi[0]} x {dpi[1]}")
+        else:
+            print("DPI information not found in the image metadata.")
         print("-------------")
 
     except Exception as e:
